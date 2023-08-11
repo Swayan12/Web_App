@@ -18,13 +18,13 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 script {
-                    def response = httpRequest(
+                    def response = httpRequest" " "(
                         acceptType: 'APPLICATION_JSON',
                         contentType: 'APPLICATION_JSON',
                         httpMode: 'POST',
                         requestBody: [status: 'redeploy'],
-                        url: "${http://13.53.176.154:8090/}/undeploy?path=${CONTEXT_PATH}"
-                    )
+                        url: "${http://13.53.176.154:8090/}/undeploy?path=${CONTEXT_PATH}" 
+                    )" " "
 
                     if (response.status == 200) {
                         echo "Undeploy successful"
