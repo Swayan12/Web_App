@@ -16,7 +16,7 @@ pipeline {
         stage('Copy HTML to Tomcat') {
             steps {
                 // Copy the HTML file to the Tomcat webapps directory
-               sh "echo password | sudo -S cp index.html /var/lib/tomcat9/webapps/ROOT/" // Assumes the Tomcat ROOT application
+               sh "echo Satya | sudo -S cp index.html /var/lib/tomcat9/webapps/ROOT/" // Assumes the Tomcat ROOT application
             }
         }
     }
