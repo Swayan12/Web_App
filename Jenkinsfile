@@ -1,41 +1,22 @@
 pipeline {
     agent any
 
-   
+    environment {
+        TOMCAT_WEBAPPS = '/var/lib/tomcat9/webapps' // Set this to the actual path of the Tomcat webapps directory
+    }
+
     stages {
-        stage('Deploy to Tomcat') {
+        stage('Checkout') {
             steps {
-                script {
-                    def response = httpRequest(
-                        acceptType: 'APPLICATION_JSON',
-                        contentType: 'APPLICATION_JSON',
-                        httpMode: 'POST',
-                        requestBody: [status: 'redeploy'],
-                        url: "${http://13.53.176.154:8090/}/undeploy?path=${CONTEXT_PATH}"
-                    )
+                // Checkout the code from the Git repository
+                checkout scm
+            }
+        }
 
-                    if (response.status == 200) {
-                        echo "Undeploy successful"
-                    } else {
-                        echo "Undeploy failed: ${response.status}"
-                        error "Failed to undeploy the app"
-                    }
-
-                    response = httpRequest(
-                        acceptType: 'APPLICATION_JSON',
-                        contentType: 'APPLICATION_JSON',
-                        httpMode: 'PUT',
-                        requestBody: [war: file(WAR_FILE)],
-                        url: "${http://13.53.176.154:8090/}/deploy?path=${CONTEXT_PATH}&update=true"
-                    )
-
-                    if (response.status == 200) {
-                        echo "Deployment successful"
-                    } else {
-                        echo "Deployment failed: ${response.status}"
-                        error "Failed to deploy the app"
-                    }
-                }
+        stage('Copy HTML to Tomcat') {
+            steps {
+                // Copy the HTML file to the Tomcat webapps directory
+                sh "cp index.html $/var/lib/tomcat9/webapps/ROOT/" // Assumes the Tomcat ROOT application
             }
         }
     }
